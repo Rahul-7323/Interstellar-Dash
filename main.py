@@ -4,7 +4,7 @@ from ursina import *
 from ursina.shaders import lit_with_shadows_shader
 
 # import the player entity from the player.py file
-from player import player
+from player import Player
 from enclosure import Enclosure
 
 # defines the speed of the game
@@ -15,14 +15,14 @@ app = Ursina()
 
 Entity.default_shader = lit_with_shadows_shader
 
+player = Player()
+
 enclosures = [Enclosure(position=(0, 0, 0), scale=(16, 0, 64)), Enclosure(position=(0, 0, 64), scale=(16, 0, 64))]
 
 def update():
     hit_info = enclosures[1].hit_info
 
     if hit_info and hit_info.entity == player:
-        print('Player entered the second ground')
-
         new_enclosure = Enclosure(
             position = (0, 0, enclosures[1].ground.position.z + 64),
             scale = (16, 0, 64)
@@ -38,7 +38,6 @@ def pause_input(key):
     if key == 'tab':    # press tab to toggle edit/play mode
         editor_camera.enabled = not editor_camera.enabled
 
-        player.cursor.enabled = not editor_camera.enabled
         mouse.locked = not editor_camera.enabled
         editor_camera.position = player.position
 
@@ -46,7 +45,11 @@ def pause_input(key):
 
 pause_handler = Entity(ignore_paused=True, input=pause_input)
 
+camera.position = (0, 6, -30)
+
 sun = DirectionalLight()
 sun.look_at(Vec3(0, -1, -0.75))
+
+Sky()
 
 app.run()

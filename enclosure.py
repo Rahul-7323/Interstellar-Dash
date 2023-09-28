@@ -40,6 +40,17 @@ class Enclosure(Entity):
             rotation_z = -90
         )
 
+        self.ceiling = Entity(
+            parent = self,
+            model = 'plane', 
+            position = (position[0], position[1] + 16, position[2]),
+            collider = 'box', 
+            scale = scale, 
+            texture = 'brick', 
+            texture_scale = (4, 4),
+            rotation_z = 180
+        )
+
         self.hit_info = None
         
         self.speed = 40
@@ -48,6 +59,7 @@ class Enclosure(Entity):
         self.ground.z -= time.dt * self.speed * GAME_SPEED
         self.left_wall.z -= time.dt * self.speed * GAME_SPEED
         self.right_wall.z -= time.dt * self.speed * GAME_SPEED
+        self.ceiling.z -= time.dt * self.speed * GAME_SPEED
 
         self.hit_info = boxcast(
             self.ground.position,
