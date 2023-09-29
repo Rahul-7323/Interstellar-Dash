@@ -1,6 +1,8 @@
 from ursina import *
 from constants import GAME_SPEED
 
+from wall import Wall
+
 class Player(Entity):
     def __init__(self, **kwargs):
         super().__init__()
@@ -72,6 +74,9 @@ class Player(Entity):
             self.prev_y = 0
         else:
             self.air_time += time.dt
+
+        if isinstance(self.intersects().entity, Wall):
+            print('hit the front wall')
 
     def calc_velocity(self, height, gravity):
         return sqrt(2 * height * gravity)
