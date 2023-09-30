@@ -6,7 +6,6 @@ from ursina.shaders import lit_with_shadows_shader
 # import the player entity from the player.py file
 from player import Player
 from enclosure import Enclosure
-from wall import Wall
 
 # defines the speed of the game
 # when training the RL model, the game speed will be set to a higher value
@@ -18,7 +17,18 @@ Entity.default_shader = lit_with_shadows_shader
 
 player = Player(parent = scene)
 
-enclosures = [Enclosure(parent = scene, position=(0, 0, 0), scale=(16, 0, 64)), Enclosure(parent = scene, position=(0, 0, 64), scale=(16, 0, 64))]
+enclosures = [Enclosure(parent = scene, position=(0, 0, 8), scale=(16, 0, 64)), Enclosure(parent = scene, position=(0, 0, 72), scale=(16, 0, 64))]
+
+# Black screen that obstructs the next enclosure
+Entity(
+    model = 'plane', 
+    position = (0, 8, 40),
+    collider = 'box', 
+    scale = (16, 0, 16), 
+    texture_scale = (1, 1),
+    rotation_x = -90,
+    color = color.black66
+)
 
 def update():
     hit_info = enclosures[1].hit_info
@@ -49,6 +59,6 @@ pause_handler = Entity(ignore_paused=True, input=pause_input)
 camera.position = (0, 6, -30)
 
 sun = DirectionalLight()
-sun.look_at(Vec3(0, -1, -0.75))
+sun.look_at(Vec3(0, -1, 0))
 
 app.run()

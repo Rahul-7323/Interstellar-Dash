@@ -1,7 +1,7 @@
 from ursina import *
 from constants import GAME_SPEED, FORWARD_SPEED
 
-from wall import Wall
+from grid import Grid
 
 class Enclosure(Entity):
     def __init__(self, position, scale, *args, **kwargs):
@@ -53,7 +53,7 @@ class Enclosure(Entity):
             rotation_z = 180
         )
 
-        self.front_wall = Wall(parent = self, position = (position[0], position[1], position[2] + 24))
+        self.grid = Grid(parent = self, position = (position[0], position[1], position[2] + 24))
 
         self.hit_info = None
         
@@ -64,7 +64,7 @@ class Enclosure(Entity):
         self.left_wall.z -= time.dt * self.speed * GAME_SPEED
         self.right_wall.z -= time.dt * self.speed * GAME_SPEED
         self.ceiling.z -= time.dt * self.speed * GAME_SPEED
-        self.front_wall.z -= time.dt * self.speed * GAME_SPEED
+        self.grid.z -= time.dt * self.speed * GAME_SPEED
         
 
         self.hit_info = boxcast(
