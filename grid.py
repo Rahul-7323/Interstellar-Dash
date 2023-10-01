@@ -17,7 +17,7 @@ class Grid(Entity):
                     texture = 'brick', 
                     texture_scale = (1, 1),
                     rotation_x = -90,
-                    enabled = True
+                    enabled = random() > 0.2
                 )
                 for x in range(4)
             ]
@@ -30,7 +30,7 @@ class Grid(Entity):
             for cell in row:
                 disabled_count += int(not cell.enabled)
 
-        # If all cells are disabled, then choose some random cell
-        # and make that enabled
+        # If all cells are enabled, then choose some random cell
+        # and make that disabled
         if disabled_count == 0:
             self.grid[randrange(0, 4)][randrange(0, 4)].enabled = False

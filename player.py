@@ -28,7 +28,7 @@ class Player(Entity):
         if ray.hit:
             self.y = ray.world_point.y
         
-        self.position += (0, 0, 0)
+        self.position += (0.001, 0, 0)
 
         # JUMP PHYSICS VARIABLES
         self.gravity = 60
@@ -37,16 +37,19 @@ class Player(Entity):
         self.velocity = 0
         self.prev_y = 0
 
+        self.hit_grid = False
+
     def update(self):
         curr_y = self.prev_y + self.calc_position(self.velocity, self.air_time, self.gravity)
 
-        ray = raycast(self.position + (0, self.height/2, 0), self.forward, distance = 0.8, traverse_target=self.traverse_target, ignore=self.ignore_list, debug=True, color=color.yellow)
+        ray = raycast(self.position + (0, self.height/2, 0), self.forward, distance = 0.8, traverse_target=self.traverse_target, ignore=self.ignore_list)
         # ray = boxcast(self.world_position+(0,2,0), self.down, ignore=self.ignore_list)
         # if not on ground and not on way up in jump, fall
         # if ray.hit:
         #     print('hit the front wall')
         if ray.hit:
-            print('hit something')
+            self.hit_grid = True
+            ray.entity.color = color.red
 
         if curr_y <= 0:
             self.air_time = 0

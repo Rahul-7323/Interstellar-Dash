@@ -65,7 +65,6 @@ class Enclosure(Entity):
         self.right_wall.z -= time.dt * self.speed * GAME_SPEED
         self.ceiling.z -= time.dt * self.speed * GAME_SPEED
         self.grid.z -= time.dt * self.speed * GAME_SPEED
-        
 
         self.hit_info = boxcast(
             self.ground.position,

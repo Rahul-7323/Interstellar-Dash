@@ -1,47 +1,22 @@
 from ursina import *
-
-# shaders are responsible for calculating the levels of lights and darkness of each pixel during the rendering of a 3D scene
-from ursina.shaders import lit_with_shadows_shader
-
-# import the player entity from the player.py file
-from player import Player
-from enclosure import Enclosure
-
-# defines the speed of the game
-# when training the RL model, the game speed will be set to a higher value
-from constants import GAME_SPEED
+from game import Game
 
 app = Ursina()
 
-Entity.default_shader = lit_with_shadows_shader
+game = Game()
 
-player = Player(parent = scene)
-
-enclosures = [Enclosure(parent = scene, position=(0, 0, 8), scale=(16, 0, 64)), Enclosure(parent = scene, position=(0, 0, 72), scale=(16, 0, 64))]
-
-# Black screen that obstructs the next enclosure
-Entity(
-    model = 'plane', 
-    position = (0, 8, 40),
-    collider = 'box', 
-    scale = (16, 0, 16), 
-    texture_scale = (1, 1),
-    rotation_x = -90,
-    color = color.black66
-)
+score_entity = Text(f'SCORE: 0', color = color.green, origin = (6, -16), background = color.black)
+score_entity.create_background()
 
 def update():
-    hit_info = enclosures[1].hit_info
+    global game
 
-    if hit_info and hit_info.entity == player:
-        new_enclosure = Enclosure(
-            position = (0, 0, enclosures[1].ground.position.z + 64),
-            scale = (16, 0, 64)
-        )
+    if game.player.hit_grid:
+        destroy(game)
+        game = Game()
 
-        destroy(enclosures[0])
-        enclosures[0] = enclosures[1]
-        enclosures[1] = new_enclosure
+    score_entity.text = f'SCORE: {game.score}'
+    score_entity.create_background()
 
 editor_camera = EditorCamera(enabled=False, ignore_paused=True)
 
@@ -50,7 +25,7 @@ def pause_input(key):
         editor_camera.enabled = not editor_camera.enabled
 
         mouse.locked = not editor_camera.enabled
-        editor_camera.position = player.position
+        # editor_camera.position = player.position
 
         application.paused = editor_camera.enabled
 
@@ -58,7 +33,6 @@ pause_handler = Entity(ignore_paused=True, input=pause_input)
 
 camera.position = (0, 6, -30)
 
-sun = DirectionalLight()
-sun.look_at(Vec3(0, -1, 0))
-
+# sun = DirectionalLight()
+# sun.look_at(Vec3(0, -1, 0))
 app.run()
