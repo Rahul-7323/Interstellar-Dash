@@ -11,4 +11,4 @@ pip install ursina
 python main.py
 ```
 
-2. Use `a`, `d`, and `space` keys to move left, move right, and jump respectively
+2. Use `a`, `d`, and `space` keys to move left, move right, and jump respectively.
